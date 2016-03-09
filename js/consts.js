@@ -5,6 +5,8 @@
     maze.WALL = -1;
     maze.PATH = -2;
     maze.CURRENT = -3;
+    maze.OPENED = -4;
+    maze.CLOSED = -5;
 
     maze.MAZE_21 = [
         [-1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],

@@ -11,7 +11,16 @@
   function Grid(values) {
     this.height = values.length;
     this.width = values[0].length;
+
+    // Persistent storage for cells and their states.
     this._cells = this._build(values);
+
+    // The list of operations which has been used to find a solution (Used to
+    // animate the solution a bit later).
+    this._operations = [];
+
+    // The path which has been found.
+    this._path = null;
   }
 
   Grid.prototype._build = function(values) {

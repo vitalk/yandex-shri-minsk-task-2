@@ -29,6 +29,14 @@ body {
     background-color: #333;
 }
 
+.maze__cell_opened {
+    background-color: #fff0b0;
+}
+
+.maze__cell_closed {
+    background-color: #fff9e0;
+}
+
 .maze__cell_path {
     background-color: #fad946;
 }

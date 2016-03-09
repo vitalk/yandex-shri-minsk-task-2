@@ -1,4 +1,6 @@
 (function(root) {
+  var OPENED = root.maze.OPENED;
+  var CLOSED = root.maze.CLOSED;
 
   /**
    * A grid cell.
@@ -17,6 +19,39 @@
     this.y = y;
     this.value = value;
   };
+
+  Cell.prototype = {
+
+    _log: function(state) {
+      this._grid._operations.push({
+        x: this.x,
+        y: this.y,
+        value: this.value,
+        state: state
+      });
+    },
+
+    get opened() {
+      this._log(OPENED);
+      return this._opened;
+    },
+
+    set opened(val) {
+      this._log(OPENED);
+      this._opened = val;
+    },
+
+    get closed() {
+      this._log(CLOSED);
+      return this._closed;
+    },
+
+    set closed(val) {
+      this._log(CLOSED);
+      this._closed = val;
+    }
+  };
+
 
   root.Cell = Cell;
 

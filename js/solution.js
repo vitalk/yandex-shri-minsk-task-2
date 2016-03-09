@@ -54,7 +54,13 @@
 
           if (cell.y === grid.height - 1) {
             console.timeEnd('Breadth-First-Search');
-            return backtrace(cell);
+
+            // Expose solution and path to ensure it can be easily
+            // animated later.
+            root.maze.solution._grid = grid;
+            root.maze.solution._grid._path = backtrace(cell);
+
+            return root.maze.solution._grid._path;
           }
 
           neigbours = grid.getNeighbors(cell);
