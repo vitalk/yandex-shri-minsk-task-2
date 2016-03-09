@@ -1,9 +1,9 @@
 (function (root) {
 
-  var Point = root.Point;
+  var Cell = root.Cell;
 
   /**
-   * Grid. Used as persistent storage for points and their states.
+   * Grid. Used as persistent storage for cells and their states.
    *
    * @constructor
    * @param {[number, number][]} values The values to create a grid.
@@ -11,44 +11,44 @@
   function Grid(values) {
     this.height = values.length;
     this.width = values[0].length;
-    this._points = this._build(values);
+    this._cells = this._build(values);
   }
 
   Grid.prototype._build = function(values) {
-    var i, j, point,
-        points = new Array(this.height);
+    var i, j, cell,
+        rows = new Array(this.height);
 
     for (i = 0; i < this.height; ++i) {
-      points[i] = new Array(this.width)
+      rows[i] = new Array(this.width)
       for (j = 0; j < this.width; ++j) {
-        points[i][j] = Point(j, i, values[i][j]);
+        rows[i][j] = Cell(j, i, values[i][j]);
       }
     };
 
-    return points;
+    return rows;
   };
 
-  Grid.prototype.getPoint = function(x, y) {
-    return this._points[y][x];
+  Grid.prototype.getCell = function(x, y) {
+    return this._cells[y][x];
   };
 
-  Grid.prototype.getNeighbors = function(point) {
+  Grid.prototype.getNeighbors = function(cell) {
     var neigbours = [];
 
-    if (this.isWalkable(point.x, point.y - 1)) {
-      neigbours.push(this.getPoint(point.x, point.y - 1));
+    if (this.isWalkable(cell.x, cell.y - 1)) {
+      neigbours.push(this.getCell(cell.x, cell.y - 1));
     };
 
-    if (this.isWalkable(point.x + 1, point.y)) {
-      neigbours.push(this.getPoint(point.x + 1, point.y));
+    if (this.isWalkable(cell.x + 1, cell.y)) {
+      neigbours.push(this.getCell(cell.x + 1, cell.y));
     };
 
-    if (this.isWalkable(point.x, point.y + 1)) {
-      neigbours.push(this.getPoint(point.x, point.y + 1));
+    if (this.isWalkable(cell.x, cell.y + 1)) {
+      neigbours.push(this.getCell(cell.x, cell.y + 1));
     };
 
-    if (this.isWalkable(point.x - 1, point.y)) {
-      neigbours.push(this.getPoint(point.x - 1, point.y));
+    if (this.isWalkable(cell.x - 1, cell.y)) {
+      neigbours.push(this.getCell(cell.x - 1, cell.y));
     };
 
     return neigbours;
@@ -61,7 +61,7 @@
 
   Grid.prototype.isWalkable = function(x, y) {
       return (this.isInside(x, y) &&
-              (this.getPoint(x, y).value !== root.maze.WALL));
+              (this.getCell(x, y).value !== root.maze.WALL));
   };
 
   root.Grid = Grid;

@@ -1,16 +1,16 @@
 (function(root) {
 
   /**
-   * A grid point.
+   * A grid cell.
    *
    * @constructor
    * @param {number} x The x axis value.
    * @param {number} y The y axis value.
-   * @param {number} value The point value.
+   * @param {number} value The cell value.
    */
-  function Point(x, y, value) {
-    if (!(this instanceof Point)) {
-      return new Point(x, y, value);
+  function Cell(x, y, value) {
+    if (!(this instanceof Cell)) {
+      return new Cell(x, y, value);
     }
 
     this.x = x;
@@ -18,6 +18,6 @@
     this.value = value;
   };
 
-  root.Point = Point;
+  root.Cell = Cell;
 
 })(this);

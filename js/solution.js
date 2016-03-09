@@ -5,7 +5,7 @@
     var CURRENT = root.maze.CURRENT;
 
     var Grid = root.Grid;
-    var Point = root.Point;
+    var Cell = root.Cell;
 
 
     /**
@@ -21,15 +21,15 @@
       /**
        * Path backtrace.
        *
-       * @param {Point} point The end point.
+       * @param {Cell} cell The end cell.
        * @returns {[number, number][]} Path according with the parent
-       *    referencies in the given point.
+       *    referencies in the given cell.
        */
-      function backtrace(point) {
-        var path = [[point.x, point.y]];
-        while (point.parent) {
-          point = point.parent;
-          path.push([point.x, point.y]);
+      function backtrace(cell) {
+        var path = [[cell.x, cell.y]];
+        while (cell.parent) {
+          cell = cell.parent;
+          path.push([cell.x, cell.y]);
         }
         return path.reverse();
       }
@@ -38,26 +38,26 @@
       function BreadthFirstSearch(maze, x, y) {
         console.time('Breadth-First-Search');
 
-        var i, l, point, neigbours, neigbour,
+        var i, l, cell, neigbours, neigbour,
             queue = [],
             grid = new Grid(maze);
 
-        Point.prototype._grid = grid;
+        Cell.prototype._grid = grid;
 
-        point = grid.getPoint(x, y);
-        queue.push(point);
-        point.opened = true;
+        cell = grid.getCell(x, y);
+        queue.push(cell);
+        cell.opened = true;
 
         while (queue.length) {
-          point = queue.shift();
-          point.closed = true;
+          cell = queue.shift();
+          cell.closed = true;
 
-          if (point.y === grid.height - 1) {
+          if (cell.y === grid.height - 1) {
             console.timeEnd('Breadth-First-Search');
-            return backtrace(point);
+            return backtrace(cell);
           }
 
-          neigbours = grid.getNeighbors(point);
+          neigbours = grid.getNeighbors(cell);
           for (i = 0, l = neigbours.length; i < l; ++i) {
             neigbour = neigbours[i];
 
@@ -67,7 +67,7 @@
 
             queue.push(neigbour);
             neigbour.opened = true;
-            neigbour.parent = point;
+            neigbour.parent = cell;
           }
         };
 
