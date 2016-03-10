@@ -9,6 +9,23 @@
 
 
     /**
+     * Path backtrace.
+     *
+     * @param {Cell} cell The end cell.
+     * @returns {[number, number][]} Path according with the parent
+     *    referencies in the given cell.
+     */
+    function backtrace(cell) {
+        var path = [[cell.x, cell.y]];
+        while (cell.parent) {
+            cell = cell.parent;
+            path.push([cell.x, cell.y]);
+        }
+        return path.reverse();
+    };
+
+
+    /**
      * Функция находит путь к выходу и возвращает найденный маршрут
      *
      * @param {number[][]} maze карта лабиринта представленная двумерной матрицей чисел
@@ -17,71 +34,49 @@
      * @returns {[number, number][]} маршрут к выходу представленный списоком пар координат
      */
     function solution(maze, x, y) {
+        console.time('Breadth-First-Search');
 
-        /**
-         * Path backtrace.
-         *
-         * @param {Cell} cell The end cell.
-         * @returns {[number, number][]} Path according with the parent
-         *    referencies in the given cell.
-         */
-        function backtrace(cell) {
-            var path = [[cell.x, cell.y]];
-            while (cell.parent) {
-                cell = cell.parent;
-                path.push([cell.x, cell.y]);
+        var i, l, cell, neigbours, neigbour,
+            queue = [],
+            grid = new Grid(maze);
+
+        Cell.prototype._grid = grid;
+
+        cell = grid.getCell(x, y);
+        queue.push(cell);
+        cell.opened = true;
+
+        while (queue.length) {
+            cell = queue.shift();
+            cell.closed = true;
+
+            if (cell.y === grid.height - 1) {
+                console.timeEnd('Breadth-First-Search');
+
+                // Expose solution and path to ensure it can be easily
+                // animated later.
+                root.maze.solution._grid = grid;
+                root.maze.solution._grid._path = backtrace(cell);
+
+                return root.maze.solution._grid._path;
             }
-            return path.reverse();
-        }
 
+            neigbours = grid.getNeighbors(cell);
+            for (i = 0, l = neigbours.length; i < l; ++i) {
+                neigbour = neigbours[i];
 
-        function BreadthFirstSearch(maze, x, y) {
-            console.time('Breadth-First-Search');
-
-            var i, l, cell, neigbours, neigbour,
-                queue = [],
-                grid = new Grid(maze);
-
-            Cell.prototype._grid = grid;
-
-            cell = grid.getCell(x, y);
-            queue.push(cell);
-            cell.opened = true;
-
-            while (queue.length) {
-                cell = queue.shift();
-                cell.closed = true;
-
-                if (cell.y === grid.height - 1) {
-                    console.timeEnd('Breadth-First-Search');
-
-                    // Expose solution and path to ensure it can be easily
-                    // animated later.
-                    root.maze.solution._grid = grid;
-                    root.maze.solution._grid._path = backtrace(cell);
-
-                    return root.maze.solution._grid._path;
+                if (neigbour.closed || neigbour.opened) {
+                    continue;
                 }
 
-                neigbours = grid.getNeighbors(cell);
-                for (i = 0, l = neigbours.length; i < l; ++i) {
-                    neigbour = neigbours[i];
-
-                    if (neigbour.closed || neigbour.opened) {
-                        continue;
-                    }
-
-                    queue.push(neigbour);
-                    neigbour.opened = true;
-                    neigbour.parent = cell;
-                }
-            };
-
-            return [];
+                queue.push(neigbour);
+                neigbour.opened = true;
+                neigbour.parent = cell;
+            }
         };
 
-        return BreadthFirstSearch(maze, x, y);
-    }
+        return [];
+    };
 
     root.maze.solution = solution;
 
