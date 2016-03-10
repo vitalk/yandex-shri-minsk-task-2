@@ -28,9 +28,9 @@
         var containerElem = element('div', 'maze'),
             rowElem,
             type,
-            row, 
+            row,
             cell,
-            x, 
+            x,
             y;
 
         for (y = 0; y < maze.length; y++) {
